@@ -16,7 +16,7 @@ public class ToDo {
     private Long id;
     @NotNull
     private String description;
-    private boolean checkMark = false;
+    private Boolean checkMark = false;
     private LocalDateTime completionDate;
     private LocalDateTime dueDate;
     private LocalDateTime creationDate;
