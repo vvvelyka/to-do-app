@@ -1,3 +1,16 @@
 spring:
   application:
     name: to-do-app
+  datasource:
+    url: jdbc:postgresql://localhost:5432/todo_dev?user=postgres&password=postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: todo
+        format_sql: true
+  flyway:
+    baseline-on-migrate: true
+    default-schema: todo
