@@ -17,7 +17,7 @@ import java.util.Optional;
 @RestController
 public class ToDoController {
 
-    private ToDoService toDoService;
+    private final ToDoService toDoService;
 
     @GetMapping
     public List<ToDo> getAllToDos() {
