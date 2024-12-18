@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS users
+CREATE TABLE IF NOT EXISTS "user"
 (
     id         BIGSERIAL PRIMARY KEY,
     username   VARCHAR(50)  NOT NULL UNIQUE,
@@ -6,4 +6,4 @@ CREATE TABLE IF NOT EXISTS users
     creation_date TIMESTAMP
 );
 
-CREATE INDEX idx_users_username ON users (username);
+CREATE INDEX idx_users_username ON "user" (username);
