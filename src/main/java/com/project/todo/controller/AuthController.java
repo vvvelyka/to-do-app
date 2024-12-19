@@ -1,7 +1,6 @@
 package com.project.todo.controller;
 
 import com.project.todo.dto.UserRegistrationDto;
-import com.project.todo.service.JwtService;
 import com.project.todo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final UserService userService;
-    private final JwtService jwtService;
 
     @PostMapping("/signup")
     public String signup(@RequestBody UserRegistrationDto userRegistrationDto) {
@@ -29,6 +27,6 @@ public class AuthController {
     @PostMapping("/login")
     public String login(Authentication authentication) {
         log.info("Login request received for username: {}", authentication.getName());
-        return jwtService.generateToken(authentication.getName());
+        return userService.authenticateUser(authentication);
     }
 }

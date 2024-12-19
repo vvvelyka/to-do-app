@@ -5,6 +5,7 @@ import com.project.todo.dto.UserRegistrationDto;
 import com.project.todo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,16 +20,24 @@ public class UserService {
     private final JwtService jwtService;
 
     @Transactional
-    public String createUser(final UserRegistrationDto userRegistrationDto) {
+    public String createUser(UserRegistrationDto userRegistrationDto) {
         log.info("Creating user with username: {}", userRegistrationDto.getUsername());
         if (userRepository.existsByUsername(userRegistrationDto.getUsername())) {
             log.warn("User with username: {} already exists", userRegistrationDto.getUsername());
             throw new IllegalArgumentException("User already exists");
         }
-        final User user = saveUser(userRegistrationDto);
-        String token = jwtService.generateToken(user.getUsername());
-        log.info("User created successfully with username: {}", user.getUsername());
-        return token;
+        User savedUser = saveUser(userRegistrationDto);
+        log.info("User created successfully with username: {}", savedUser.getUsername());
+        return jwtService.generateToken(savedUser.getUsername());
+    }
+
+    public String authenticateUser(Authentication authentication) {
+        if (authentication.isAuthenticated()) {
+            log.info("User authenticated successfully with username: {}", authentication.getName());
+            return jwtService.generateToken(authentication.getName());
+        }
+        log.warn("Authentication failed for user: {}", authentication.getName());
+        throw new IllegalArgumentException("Authentication failed");
     }
 
     private User saveUser(final UserRegistrationDto userRegistrationDto) {
