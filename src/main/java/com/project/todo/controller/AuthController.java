@@ -2,6 +2,7 @@ package com.project.todo.controller;
 
 import com.project.todo.dto.UserRegistrationDto;
 import com.project.todo.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -19,7 +20,7 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public String signup(@RequestBody UserRegistrationDto userRegistrationDto) {
+    public String signup(@RequestBody @Valid UserRegistrationDto userRegistrationDto) {
         log.info("Signup request received for username: {}", userRegistrationDto.getUsername());
         return userService.createUser(userRegistrationDto);
     }
