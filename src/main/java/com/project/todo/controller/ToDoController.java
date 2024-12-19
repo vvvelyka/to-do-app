@@ -7,6 +7,7 @@ import com.project.todo.service.ToDoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class ToDoController {
         return toDoService.getAllToDosForCurrentUser();
     }
 
+    @PreAuthorize("@authorizationService.validateAccess(#id)")
     @GetMapping("/{id}")
     public ToDoDto getToDoById(@PathVariable Long id) {
         log.info("Request to get ToDo with id: {}", id);
@@ -38,12 +40,14 @@ public class ToDoController {
         return toDoService.createToDo(toDoDto);
     }
 
+    @PreAuthorize("@authorizationService.validateAccess(#id)")
     @PatchMapping("/{id}")
     public ToDoDto updateToDo(@PathVariable Long id, @RequestBody @Valid UpdateToDoDto updatedToDo) {
         log.info("Request to update ToDo with id: {}", id);
         return toDoService.updateToDo(id, updatedToDo);
     }
 
+    @PreAuthorize("@authorizationService.validateAccess(#id)")
     @DeleteMapping("/{id}")
     public void deleteToDo(@PathVariable Long id) {
         log.info("Request to delete ToDo with id: {}", id);
