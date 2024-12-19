@@ -1,6 +1,7 @@
 package com.project.todo.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.time.Duration;
 import java.time.Instant;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class JwtService {
@@ -20,7 +22,8 @@ public class JwtService {
     private Duration ttl;
     private final JwtEncoder jwtEncoder;
 
-    public String generateToken(final String username) {
+    public String generateToken(String username) {
+        log.debug("Generating token for username: {}", username);
         final Instant now = Instant.now();
         final JwtClaimsSet claimsSet = JwtClaimsSet.builder()
                 .issuer(issuer)
@@ -29,6 +32,8 @@ public class JwtService {
                 .subject(username)
                 .build();
 
-        return jwtEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue();
+        String token = jwtEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue();
+        log.debug("Token generated successfully for username: {}", username);
+        return token;
     }
 }
