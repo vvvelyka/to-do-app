@@ -1,14 +1,15 @@
 package com.project.todo.controller;
 
-import com.project.todo.domain.ToDo;
+import com.project.todo.dto.CreateToDoDto;
+import com.project.todo.dto.ToDoDto;
+import com.project.todo.dto.UpdateToDoDto;
 import com.project.todo.service.ToDoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Slf4j
@@ -20,46 +21,32 @@ public class ToDoController {
     private final ToDoService toDoService;
 
     @GetMapping
-    public List<ToDo> getAllToDos() {
-        log.info("Fetching all ToDos");
-        return toDoService.getAllToDos();
+    public List<ToDoDto> getAllToDos() {
+        log.info("Request to get all ToDos for current user");
+        return toDoService.getAllToDosForCurrentUser();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ToDo> getToDoById(@PathVariable final Long id) {
-        log.info("Fetching ToDo with id: {}", id);
-        final Optional<ToDo> toDo = toDoService.getToDoById(id);
-        return toDo.map(ResponseEntity::ok).orElseGet(() -> {
-            log.warn("ToDo with id: {} not found", id);
-            return ResponseEntity.notFound().build();
-        });
+    public ToDoDto getToDoById(@PathVariable Long id) {
+        log.info("Request to get ToDo with id: {}", id);
+        return toDoService.getToDoById(id);
     }
 
     @PostMapping
-    public ToDo createToDo(@RequestBody final ToDo toDo) {
-        log.info("Creating new ToDo: {}", toDo);
-        return toDoService.createToDo(toDo);
+    public ToDoDto createToDo(@RequestBody @Valid CreateToDoDto toDoDto) {
+        log.info("Request to create new ToDo: {}", toDoDto);
+        return toDoService.createToDo(toDoDto);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ToDo> updateToDo(@PathVariable final Long id, @RequestBody final ToDo changedToDo) {
-        log.info("Updating ToDo with id: {}", id);
-        final Optional<ToDo> updatedToDo = toDoService.updateToDo(id, changedToDo);
-        return updatedToDo.map(ResponseEntity::ok).orElseGet(() -> {
-            log.warn("ToDo with id: {} not found", id);
-            return ResponseEntity.notFound().build();
-        });
+    public ToDoDto updateToDo(@PathVariable Long id, @RequestBody @Valid UpdateToDoDto updatedToDo) {
+        log.info("Request to update ToDo with id: {}", id);
+        return toDoService.updateToDo(id, updatedToDo);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteToDo(@PathVariable final Long id) {
-        log.info("Deleting ToDo with id: {}", id);
-        if (toDoService.deleteToDo(id)) {
-            log.info("Deleted ToDo with id: {}", id);
-            return ResponseEntity.noContent().build();
-        } else {
-            log.warn("ToDo with id: {} not found", id);
-            return ResponseEntity.notFound().build();
-        }
+    public void deleteToDo(@PathVariable Long id) {
+        log.info("Request to delete ToDo with id: {}", id);
+        toDoService.deleteToDo(id);
     }
 }

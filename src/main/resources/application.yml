@@ -21,3 +21,7 @@ jwt:
   private-key: classpath:keystore.key
   public-key: classpath:keystore.pub
   ttl: 1h
+
+logging:
+  level:
+    com.project.todo: DEBUG

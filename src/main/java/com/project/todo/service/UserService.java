@@ -6,6 +6,7 @@ import com.project.todo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +39,19 @@ public class UserService {
         }
         log.warn("Authentication failed for user: {}", authentication.getName());
         throw new IllegalArgumentException("Authentication failed");
+    }
+
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+    }
+
+    public User getCurrentUser() {
+        String username = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName();
+        log.info("Fetching current user with username: {}", username);
+        return getUserByUsername(username);
     }
 
     private User saveUser(final UserRegistrationDto userRegistrationDto) {
