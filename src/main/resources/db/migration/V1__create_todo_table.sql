@@ -6,6 +6,6 @@ CREATE TABLE IF NOT EXISTS todo
     description     VARCHAR(255) NOT NULL,
     check_mark      BOOLEAN      NOT NULL DEFAULT FALSE,
     completion_date TIMESTAMP,
-    due_date        TIMESTAMP,
+    due_date        DATE,
     creation_date   TIMESTAMP
 );

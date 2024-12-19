@@ -6,4 +6,4 @@ CREATE TABLE IF NOT EXISTS "user"
     creation_date TIMESTAMP
 );
 
-CREATE INDEX idx_users_username ON "user" (username);
+CREATE INDEX IF NOT EXISTS idx_users_username ON "user" (username);
