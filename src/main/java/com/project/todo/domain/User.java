@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Table(name = "user")
@@ -19,4 +20,8 @@ public class User {
     private String password;
     @CreatedDate
     private LocalDateTime creationDate;
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.REMOVE,
+            fetch = FetchType.LAZY)
+    private List<ToDo> toDos;
 }

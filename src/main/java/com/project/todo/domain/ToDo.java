@@ -1,11 +1,13 @@
 package com.project.todo.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
@@ -21,7 +23,11 @@ public class ToDo {
     private String description;
     private Boolean checkMark = false;
     private LocalDateTime completionDate;
-    private LocalDateTime dueDate;
+    private LocalDate dueDate;
     @CreatedDate
     private LocalDateTime creationDate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties(value = {"toDos", "password", "creationDate"})
+    private User user;
 }
