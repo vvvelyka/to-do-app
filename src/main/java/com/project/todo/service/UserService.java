@@ -1,6 +1,7 @@
 package com.project.todo.service;
 
 import com.project.todo.domain.User;
+import com.project.todo.dto.UserDto;
 import com.project.todo.dto.UserRegistrationDto;
 import com.project.todo.repository.UserRepository;
 import com.project.todo.service.mapper.UserMapper;
@@ -23,7 +24,7 @@ public class UserService {
     private final JwtService jwtService;
 
     @Transactional
-    public String createUser(UserRegistrationDto userRegistrationDto) {
+    public UserDto createUser(UserRegistrationDto userRegistrationDto) {
         log.info("Creating user with username: {}", userRegistrationDto.getUsername());
         if (userRepository.existsByUsername(userRegistrationDto.getUsername())) {
             log.warn("User with username: {} already exists", userRegistrationDto.getUsername());
@@ -31,7 +32,7 @@ public class UserService {
         }
         User savedUser = saveUser(userRegistrationDto);
         log.info("User created successfully with username: {}", savedUser.getUsername());
-        return jwtService.generateToken(savedUser.getUsername());
+        return userMapper.toDto(savedUser);
     }
 
     public String authenticateUser(Authentication authentication) {
