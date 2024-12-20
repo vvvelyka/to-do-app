@@ -29,7 +29,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/api/login", "/api/signup") // Disable CSRF for these endpoints
+                        .ignoringRequestMatchers("/api/auth/**") // Disable CSRF for these endpoints
                 )
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(STATELESS))

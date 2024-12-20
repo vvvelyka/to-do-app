@@ -1,7 +1,9 @@
 package com.project.todo.controller;
 
+import com.project.todo.dto.TokenResponseDto;
 import com.project.todo.dto.UserDto;
 import com.project.todo.dto.UserRegistrationDto;
+import com.project.todo.service.AuthenticationService;
 import com.project.todo.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 @RestController
 public class AuthController {
 
     private final UserService userService;
+    private final AuthenticationService authenticationService;
 
     @PostMapping("/signup")
     public UserDto signup(@RequestBody @Valid UserRegistrationDto userRegistrationDto) {
@@ -27,8 +30,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(Authentication authentication) {
+    public TokenResponseDto login(Authentication authentication) {
         log.info("Login request received for username: {}", authentication.getName());
-        return userService.authenticateUser(authentication);
+        return authenticationService.authenticateUser(authentication);
     }
 }
