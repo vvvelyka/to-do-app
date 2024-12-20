@@ -49,7 +49,7 @@ public class SecurityConfig {
                         )
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/signup").permitAll()
+                        .requestMatchers("/api/auth/sign-up").permitAll()
                                 .anyRequest().authenticated()
                 );
         return http.build();
