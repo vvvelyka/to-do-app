@@ -46,7 +46,7 @@ public class UserService {
         String username = SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName();
-        log.info("Fetching current user with username: {}", username);
+        log.debug("Fetching current user with username: {}", username);
         return getUserByUsername(username);
     }
 }

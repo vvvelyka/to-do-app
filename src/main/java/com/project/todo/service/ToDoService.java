@@ -26,13 +26,13 @@ public class ToDoService {
     private final UserService userService;
 
     public List<ToDoDto> getAllToDosForCurrentUser() {
-        log.info("Fetching all ToDos");
+        log.debug("Fetching all ToDos");
         return userService.getCurrentUser().getToDos().stream()
                 .map(toDoMapper::toDto).toList();
     }
 
     public ToDoDto getToDoById(Long id) {
-        log.info("Fetching ToDo with id: {}", id);
+        log.debug("Fetching ToDo with id: {}", id);
         return toDoRepository.findById(id)
                 .map(toDoMapper::toDto)
                 .orElseThrow(() -> new ApplicationException("ToDo not found", HttpStatus.NOT_FOUND));
@@ -40,7 +40,7 @@ public class ToDoService {
 
     @Transactional
     public ToDoDto createToDo(CreateToDoDto toDoDto) {
-        log.info("Creating new ToDo: {}", toDoDto);
+        log.debug("Creating new ToDo: {}", toDoDto);
         ToDo toDo = toDoMapper.toEntity(toDoDto);
         toDo.setUser(userService.getCurrentUser());
         return toDoMapper.toDto(toDoRepository.save(toDo));
@@ -48,13 +48,13 @@ public class ToDoService {
 
     @Transactional
     public ToDoDto updateToDo(Long id, UpdateToDoDto updateToDoDto) {
-        log.info("Updating ToDo with id: {}", id);
+        log.debug("Updating ToDo with id: {}", id);
         return toDoRepository.findById(id).map(toDo -> {
             if (updateToDoDto.getCheckMark() != null && !toDo.getCheckMark().equals(updateToDoDto.getCheckMark())) {
                 updateCompletionDate(toDo, updateToDoDto);
             }
             toDoMapper.updateEntity(toDo, updateToDoDto);
-            log.info("Updated ToDo: {}", toDo);
+            log.debug("Updated ToDo: {}", toDo);
             return toDoMapper.toDto(toDoRepository.save(toDo));
         }).orElseThrow(() -> new ApplicationException("ToDo not found", HttpStatus.NOT_FOUND));
     }
@@ -64,7 +64,7 @@ public class ToDoService {
         log.info("Deleting ToDo with id: {}", id);
         if (toDoRepository.existsById(id)) {
             toDoRepository.deleteById(id);
-            log.info("Deleted ToDo with id: {}", id);
+            log.debug("Deleted ToDo with id: {}", id);
         } else {
             log.warn("ToDo with id: {} not found", id);
             throw new ApplicationException("ToDo not found", HttpStatus.NOT_FOUND);
