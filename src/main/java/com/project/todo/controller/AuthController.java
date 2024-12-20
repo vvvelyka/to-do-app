@@ -32,7 +32,7 @@ public class AuthController {
      *
      * @param userRegistrationDto the user DTO with credentials to register.
      * @return {@code 200} with registered user details in the body,
-     *         {@code 400} if the user already exists or provided data is invalid or,
+     *         {@code 400} if the user already exists or provided data is invalid,
      *         {@code 500} if there is an internal server error.
      */
     @PostMapping("/sign-up")
@@ -45,8 +45,8 @@ public class AuthController {
      * Authenticates a user Basic HTTP authentication.
      *
      * @param authentication the authentication object containing the user's credentials.
-     * @return {@code 200} with JWT access token in the body
-     *         {@code 401} if the user credentials invalid
+     * @return {@code 200} with JWT access token in the body,
+     *         {@code 401} if the user credentials invalid,
      *         {@code 500} if there is an internal server error.
      */
     @PostMapping("/login")

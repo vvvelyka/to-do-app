@@ -8,8 +8,8 @@ import java.time.LocalDate;
 
 @Data
 public class CreateToDoDto {
-    @NotNull
-    @Size(min = 1, max = 255)
+    @NotNull(message = "Description cannot be null")
+    @Size(min = 1, max = 255, message = "Description must be between 1 and 255 characters")
     private String description;
     private LocalDate dueDate;
 }

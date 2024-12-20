@@ -5,9 +5,11 @@ import com.project.todo.dto.CreateToDoDto;
 import com.project.todo.dto.ToDoDto;
 import com.project.todo.dto.UpdateToDoDto;
 import com.project.todo.repository.ToDoRepository;
+import com.project.todo.service.exception.ApplicationException;
 import com.project.todo.service.mapper.ToDoMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +35,7 @@ public class ToDoService {
         log.info("Fetching ToDo with id: {}", id);
         return toDoRepository.findById(id)
                 .map(toDoMapper::toDto)
-                .orElseThrow(() -> new IllegalArgumentException("ToDo not found"));
+                .orElseThrow(() -> new ApplicationException("ToDo not found", HttpStatus.NOT_FOUND));
     }
 
     @Transactional
@@ -54,7 +56,7 @@ public class ToDoService {
             toDoMapper.updateEntity(toDo, updateToDoDto);
             log.info("Updated ToDo: {}", toDo);
             return toDoMapper.toDto(toDoRepository.save(toDo));
-        }).orElseThrow(() -> new IllegalArgumentException("ToDo not found"));
+        }).orElseThrow(() -> new ApplicationException("ToDo not found", HttpStatus.NOT_FOUND));
     }
 
     @Transactional
@@ -65,7 +67,7 @@ public class ToDoService {
             log.info("Deleted ToDo with id: {}", id);
         } else {
             log.warn("ToDo with id: {} not found", id);
-            throw new IllegalArgumentException("ToDo not found");
+            throw new ApplicationException("ToDo not found", HttpStatus.NOT_FOUND);
         }
     }
 

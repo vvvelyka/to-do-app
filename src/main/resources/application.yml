@@ -15,6 +15,12 @@ spring:
     baseline-on-migrate: true
     default-schema: todo
 
+springdoc:
+  api-docs:
+    version: openapi_3_0
+  paths-to-match: /api/**
+  writer-with-default-pretty-printer: true
+
 
 jwt:
   issuer: ${spring.application.name}
