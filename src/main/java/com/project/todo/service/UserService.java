@@ -3,6 +3,7 @@ package com.project.todo.service;
 import com.project.todo.domain.User;
 import com.project.todo.dto.UserRegistrationDto;
 import com.project.todo.repository.UserRepository;
+import com.project.todo.service.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
@@ -55,7 +57,7 @@ public class UserService {
     }
 
     private User saveUser(final UserRegistrationDto userRegistrationDto) {
-        final User user = userRegistrationDto.toUser();
+        final User user = userMapper.toEntity(userRegistrationDto);
         user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
         return userRepository.save(user);
     }

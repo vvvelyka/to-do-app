@@ -9,6 +9,7 @@ import com.project.todo.service.mapper.ToDoMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -35,6 +36,7 @@ public class ToDoService {
                 .orElseThrow(() -> new IllegalArgumentException("ToDo not found"));
     }
 
+    @Transactional
     public ToDoDto createToDo(CreateToDoDto toDoDto) {
         log.info("Creating new ToDo: {}", toDoDto);
         ToDo toDo = toDoMapper.toEntity(toDoDto);
@@ -42,6 +44,7 @@ public class ToDoService {
         return toDoMapper.toDto(toDoRepository.save(toDo));
     }
 
+    @Transactional
     public ToDoDto updateToDo(Long id, UpdateToDoDto updateToDoDto) {
         log.info("Updating ToDo with id: {}", id);
         return toDoRepository.findById(id).map(toDo -> {
@@ -54,6 +57,7 @@ public class ToDoService {
         }).orElseThrow(() -> new IllegalArgumentException("ToDo not found"));
     }
 
+    @Transactional
     public void deleteToDo(Long id) {
         log.info("Deleting ToDo with id: {}", id);
         if (toDoRepository.existsById(id)) {
