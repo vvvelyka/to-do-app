@@ -3,16 +3,14 @@ package com.project.todo.controller;
 import com.project.todo.dto.TokenResponseDto;
 import com.project.todo.dto.UserDto;
 import com.project.todo.dto.UserRegistrationDto;
+import com.project.todo.dto.UsernameResponseDto;
 import com.project.todo.service.AuthenticationService;
 import com.project.todo.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Controller for handling authentication-related requests.
@@ -53,5 +51,16 @@ public class AuthController {
     public TokenResponseDto login(Authentication authentication) {
         log.info("Login request received for username: {}", authentication.getName());
         return authenticationService.authenticateUser(authentication);
+    }
+
+    /**
+     * Returns the username of the currently authenticated user.
+     * @param authentication the authentication object containing the user's credentials.
+     * @return {@code 200} with the username in the body,
+     */
+    @GetMapping("/username")
+    public UsernameResponseDto getCurrentUsername(Authentication authentication) {
+        log.info("Request to get current username: {}", authentication.getName());
+        return new UsernameResponseDto(authentication.getName());
     }
 }
